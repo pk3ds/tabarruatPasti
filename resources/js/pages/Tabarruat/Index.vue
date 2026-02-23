@@ -21,7 +21,7 @@ const currentStep = ref<'form' | 'qr' | 'confirmation'>('form');
 // Loading state
 const loading = ref(false);
 
-// QR code image path - replace this with your actual QR code image
+// QR code image path
 const qrCodeImage = ref('/images/qr-sumbangan.png');
 
 // Errors
@@ -119,13 +119,13 @@ const successMessage = computed(() => {
 
 <template>
     <div
-        class="min-h-screen bg-gradient-to-b from-emerald-50 to-white px-4 py-8 sm:px-6"
+        class="min-h-screen bg-gradient-to-b from-emerald-50 to-white px-4 py-8 dark:from-gray-900 dark:to-gray-900 sm:px-6"
     >
         <div class="mx-auto max-w-2xl">
             <!-- Header -->
             <div class="mb-8 text-center">
                 <h1
-                    class="mb-2 text-3xl font-bold text-emerald-800 sm:text-4xl"
+                    class="mb-2 text-3xl font-bold text-emerald-800 dark:text-emerald-400 sm:text-4xl"
                 >
                     Borang Tabarruat
                 </h1>
@@ -141,7 +141,7 @@ const successMessage = computed(() => {
 
             <!-- Main Card -->
             <div
-                class="overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-xl"
+                class="overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-xl dark:border-emerald-900 dark:bg-gray-800"
             >
                 <!-- Form Step -->
                 <div v-if="currentStep === 'form'" class="p-6 sm:p-8">
@@ -150,7 +150,7 @@ const successMessage = computed(() => {
                         <div>
                             <label
                                 for="nama_pemohon"
-                                class="mb-2 block text-sm font-medium text-gray-700"
+                                class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
                             >
                                 Nama Pemohon <span class="text-red-500">*</span>
                             </label>
@@ -158,7 +158,7 @@ const successMessage = computed(() => {
                                 id="nama_pemohon"
                                 v-model="form.nama_pemohon"
                                 type="text"
-                                class="w-full rounded-lg border border-gray-300 px-4 py-3 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500"
                                 placeholder="Masukkan nama penuh"
                                 :class="{
                                     'border-red-500': errors.nama_pemohon,
@@ -176,14 +176,14 @@ const successMessage = computed(() => {
                         <div>
                             <label
                                 for="pasti"
-                                class="mb-2 block text-sm font-medium text-gray-700"
+                                class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
                             >
                                 PASTI <span class="text-red-500">*</span>
                             </label>
                             <select
                                 id="pasti"
                                 v-model="form.pasti"
-                                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:bg-gray-800 dark:text-gray-100"
                                 :class="{ 'border-red-500': errors.pasti }"
                             >
                                 <option value="">Pilih PASTI</option>
@@ -207,7 +207,7 @@ const successMessage = computed(() => {
                         <div>
                             <div class="mb-2 flex items-center justify-between">
                                 <label
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                 >
                                     Nama Arwah
                                     <span class="text-red-500">*</span>
@@ -215,7 +215,7 @@ const successMessage = computed(() => {
                                 <button
                                     @click="addArwahField"
                                     type="button"
-                                    class="flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700"
+                                    class="flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
                                 >
                                     <span class="text-lg">+</span> Tambah
                                 </button>
@@ -229,7 +229,7 @@ const successMessage = computed(() => {
                                     <input
                                         v-model="form.nama_arwah[index]"
                                         type="text"
-                                        class="flex-1 rounded-lg border border-gray-300 px-4 py-3 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                                        class="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500"
                                         placeholder="Masukkan nama arwah"
                                     />
                                     <button
@@ -263,22 +263,51 @@ const successMessage = computed(() => {
                             </p>
                         </div>
 
-                        <!-- Sumbangan Checkbox -->
-                        <div
-                            class="flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4"
-                        >
-                            <input
-                                id="sudah_sumbangan"
-                                v-model="form.sudah_sumbangan"
-                                type="checkbox"
-                                class="mt-1 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                            />
+                        <!-- Sumbangan Radio Buttons -->
+                        <div>
                             <label
-                                for="sudah_sumbangan"
-                                class="cursor-pointer text-sm text-gray-700"
+                                class="mb-3 block text-sm font-medium text-gray-700 dark:text-gray-300"
                             >
-                                Saya sudah memberikan sumbangan
+                                Status Sumbangan
+                                <span class="text-red-500">*</span>
                             </label>
+                            <div class="space-y-3">
+                                <label
+                                    class="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition hover:border-emerald-300 hover:bg-emerald-50 dark:border-gray-700 dark:bg-gray-700 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/30"
+                                    :class="{
+                                        'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-200 dark:border-emerald-500 dark:bg-emerald-900/30 dark:ring-emerald-700':
+                                            form.sudah_sumbangan === true,
+                                    }"
+                                >
+                                    <input
+                                        v-model="form.sudah_sumbangan"
+                                        type="radio"
+                                        :value="true"
+                                        class="h-5 w-5 text-emerald-600 focus:ring-emerald-500"
+                                    />
+                                    <span class="text-sm text-gray-700 dark:text-gray-200"
+                                        >Telah sampaikan sumbangan</span
+                                    >
+                                </label>
+
+                                <label
+                                    class="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition hover:border-emerald-300 hover:bg-emerald-50 dark:border-gray-700 dark:bg-gray-700 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/30"
+                                    :class="{
+                                        'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-200 dark:border-emerald-500 dark:bg-emerald-900/30 dark:ring-emerald-700':
+                                            form.sudah_sumbangan === false,
+                                    }"
+                                >
+                                    <input
+                                        v-model="form.sudah_sumbangan"
+                                        type="radio"
+                                        :value="false"
+                                        class="h-5 w-5 text-emerald-600 focus:ring-emerald-500"
+                                    />
+                                    <span class="text-sm text-gray-700 dark:text-gray-200"
+                                        >Belum, akan buat selepas ini</span
+                                    >
+                                </label>
+                            </div>
                         </div>
 
                         <!-- Next Button -->
@@ -299,11 +328,11 @@ const successMessage = computed(() => {
                 >
                     <div class="mb-6">
                         <div
-                            class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-amber-100"
+                            class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                class="h-8 w-8 text-amber-600"
+                                class="h-8 w-8 text-amber-600 dark:text-amber-400"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -316,10 +345,10 @@ const successMessage = computed(() => {
                                 />
                             </svg>
                         </div>
-                        <h2 class="mb-2 text-2xl font-bold text-gray-800">
+                        <h2 class="mb-2 text-2xl font-bold text-gray-800 dark:text-gray-100">
                             Sila Buat Sumbangan
                         </h2>
-                        <p class="text-gray-600">
+                        <p class="text-gray-600 dark:text-gray-400">
                             Sila scan QR code di bawah untuk membuat sumbangan
                             terlebih dahulu
                         </p>
@@ -328,7 +357,7 @@ const successMessage = computed(() => {
                     <!-- QR Code Placeholder -->
                     <div class="mb-6 flex justify-center">
                         <div
-                            class="flex h-64 w-64 items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-100"
+                            class="flex h-64 w-64 items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-100 dark:border-gray-600 dark:bg-gray-700"
                         >
                             <!-- Replace this with your actual QR code image -->
                             <img
@@ -342,7 +371,7 @@ const successMessage = computed(() => {
                                         'flex';
                                 "
                             />
-                            <div class="hidden p-4 text-center text-gray-400">
+                            <div class="hidden p-4 text-center text-gray-400 dark:text-gray-500">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="mx-auto mb-2 h-16 w-16"
@@ -359,7 +388,7 @@ const successMessage = computed(() => {
                                 </svg>
                                 <p class="text-sm">
                                     Sediakan gambar QR kod di<br /><code
-                                        class="rounded bg-gray-200 px-2 py-1 text-xs"
+                                        class="rounded bg-gray-200 px-2 py-1 text-xs dark:bg-gray-600 dark:text-gray-300"
                                         >public/images/qr-sumbangan.png</code
                                     >
                                 </p>
@@ -368,11 +397,12 @@ const successMessage = computed(() => {
                     </div>
 
                     <div
-                        class="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800"
+                        class="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
                     >
                         <p>
-                            Setelah membuat sumbangan, sila tandakan checkbox
-                            "Saya sudah memberikan sumbangan" dan teruskan.
+                            Setelah membuat sumbangan, sila kembali ke borang
+                            dan pilih "Telah sampaikan sumbangan" untuk
+                            teruskan.
                         </p>
                     </div>
 
@@ -380,7 +410,7 @@ const successMessage = computed(() => {
                         <button
                             @click="goBack"
                             type="button"
-                            class="flex-1 rounded-lg bg-gray-100 px-6 py-3 font-medium text-gray-700 transition hover:bg-gray-200"
+                            class="flex-1 rounded-lg bg-gray-100 px-6 py-3 font-medium text-gray-700 transition hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                         >
                             Kembali
                         </button>
@@ -390,7 +420,7 @@ const successMessage = computed(() => {
                                 proceedToNext();
                             "
                             type="button"
-                            class="flex-1 rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white transition hover:bg-emerald-700"
+                            class="flex-1 rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white transition hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
                         >
                             Saya Dah Sumbang
                         </button>
@@ -404,11 +434,11 @@ const successMessage = computed(() => {
                 >
                     <div class="mb-6 text-center">
                         <div
-                            class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100"
+                            class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/50"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                class="h-8 w-8 text-emerald-600"
+                                class="h-8 w-8 text-emerald-600 dark:text-emerald-400"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -421,34 +451,34 @@ const successMessage = computed(() => {
                                 />
                             </svg>
                         </div>
-                        <h2 class="mb-2 text-2xl font-bold text-gray-800">
+                        <h2 class="mb-2 text-2xl font-bold text-gray-800 dark:text-gray-100">
                             Sahkan Permohonan
                         </h2>
-                        <p class="text-gray-600">
+                        <p class="text-gray-600 dark:text-gray-400">
                             Sila semak maklumat berikut sebelum menghantar
                         </p>
                     </div>
 
                     <!-- Confirmation Details -->
                     <div class="mb-6 space-y-4">
-                        <div class="rounded-lg bg-gray-50 p-4">
-                            <p class="mb-1 text-sm text-gray-500">
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700">
+                            <p class="mb-1 text-sm text-gray-500 dark:text-gray-400">
                                 Nama Pemohon
                             </p>
-                            <p class="font-semibold text-gray-800">
+                            <p class="font-semibold text-gray-800 dark:text-gray-100">
                                 {{ form.nama_pemohon }}
                             </p>
                         </div>
 
-                        <div class="rounded-lg bg-gray-50 p-4">
-                            <p class="mb-1 text-sm text-gray-500">PASTI</p>
-                            <p class="font-semibold text-gray-800">
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700">
+                            <p class="mb-1 text-sm text-gray-500 dark:text-gray-400">PASTI</p>
+                            <p class="font-semibold text-gray-800 dark:text-gray-100">
                                 {{ form.pasti }}
                             </p>
                         </div>
 
-                        <div class="rounded-lg bg-gray-50 p-4">
-                            <p class="mb-1 text-sm text-gray-500">Nama Arwah</p>
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700">
+                            <p class="mb-1 text-sm text-gray-500 dark:text-gray-400">Nama Arwah</p>
                             <ul class="space-y-1">
                                 <li
                                     v-for="(
@@ -457,7 +487,7 @@ const successMessage = computed(() => {
                                         n.trim(),
                                     )"
                                     :key="index"
-                                    class="font-semibold text-gray-800"
+                                    class="font-semibold text-gray-800 dark:text-gray-100"
                                 >
                                     {{ index + 1 }}. {{ arwah }}
                                 </li>
@@ -465,12 +495,12 @@ const successMessage = computed(() => {
                         </div>
 
                         <div
-                            class="rounded-lg border border-emerald-200 bg-emerald-50 p-4"
+                            class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-700 dark:bg-emerald-900/30"
                         >
-                            <p class="mb-1 text-sm text-emerald-600">
+                            <p class="mb-1 text-sm text-emerald-600 dark:text-emerald-400">
                                 Status Sumbangan
                             </p>
-                            <p class="font-semibold text-emerald-700">
+                            <p class="font-semibold text-emerald-700 dark:text-emerald-300">
                                 {{
                                     form.sudah_sumbangan
                                         ? 'Sudah memberikan sumbangan'
@@ -486,14 +516,14 @@ const successMessage = computed(() => {
                             @click="goBack"
                             type="button"
                             :disabled="loading"
-                            class="flex-1 rounded-lg bg-gray-100 px-6 py-3 font-medium text-gray-700 transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
+                            class="flex-1 rounded-lg bg-gray-100 px-6 py-3 font-medium text-gray-700 transition hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             Kembali
                         </button>
                         <button
                             @click="submitForm"
                             :disabled="loading"
-                            class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+                            class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-6 py-3 font-medium text-white transition hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             <svg
                                 v-if="loading"
@@ -525,7 +555,7 @@ const successMessage = computed(() => {
             </div>
 
             <!-- Footer -->
-            <div class="mt-6 text-center text-sm text-gray-500">
+            <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
                 <p>&copy; {{ new Date().getFullYear() }} Tabarruat PASTI</p>
             </div>
         </div>
