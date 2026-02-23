@@ -1,21 +1,17 @@
-# Stage 1: Build frontend assets
-FROM node:20-alpine AS frontend
+# Stage 1: Composer dependencies only
+FROM composer:latest AS composer
 
 WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
-COPY . .
-RUN npm run build
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 
-# Stage 2: PHP app
+# Stage 2: Final image (PHP + Node for build, then Node removed)
 FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www/html
 
-# Install system dependencies
+# Install system dependencies + Node (needed for vite build)
 RUN apk add --no-cache \
     nginx \
     supervisor \
@@ -23,26 +19,28 @@ RUN apk add --no-cache \
     libpng-dev \
     libzip-dev \
     zip \
-    unzip
+    unzip \
+    nodejs \
+    npm
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql zip gd opcache
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 # Copy app files
 COPY . .
 
-# Copy built frontend assets from stage 1
-COPY --from=frontend /app/public/build ./public/build
+# Copy vendor from composer stage
+COPY --from=composer /app/vendor ./vendor
 
-# Install PHP dependencies (no dev)
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Run post-install scripts now that vendor exists
+RUN composer run-script post-autoload-dump
+
+# Build frontend (php is available here, so wayfinder works)
+RUN npm ci && npm run build && rm -rf node_modules
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 # Copy config files
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
