@@ -33,7 +33,7 @@ COPY . .
 COPY --from=composer /app/vendor ./vendor
 
 # Run post-install scripts now that vendor exists
-RUN composer run-script post-autoload-dump
+RUN php artisan package:discover --ansi
 
 # Build frontend (php is available here, so wayfinder works)
 RUN npm ci && npm run build && rm -rf node_modules
