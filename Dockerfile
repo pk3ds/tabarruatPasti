@@ -11,6 +11,10 @@ FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www/html
 
+# Build-time arg for Vite env vars (baked into the JS bundle)
+ARG VITE_APP_NAME="Tabarruat PASTI"
+ENV VITE_APP_NAME=${VITE_APP_NAME}
+
 # Install system dependencies + Node (needed for vite build)
 RUN apk add --no-cache \
     nginx \

@@ -1,6 +1,9 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        VITE_APP_NAME: "Tabarruat PASTI"
     restart: unless-stopped
     env_file: .env
     extra_hosts:
